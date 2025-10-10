@@ -1,2 +1,2 @@
 # COMP2068JSFrameworks
-
+This is a personal portfolio website built using Node.js, Express, and Handlebars (HBS). It showcases my skills as a computer programming student, featuring sections for Home, About, Projects, and Contact. Each project has its own detailed page with live links, images, and descriptions. The site includes smooth scrolling, responsive design, and fully functional social links, allowing visitors to explore my work and get in touch easily.
