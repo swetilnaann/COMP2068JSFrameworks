@@ -1,0 +1,43 @@
+{{!< layout}}
+<div class="container mt-4">
+  <h2>🩷 My Logged Cycles</h2>
+  <a href="/add-cycle" class="btn btn-primary mb-3">Add New Cycle</a>
+  <a href="/calendar" class="btn btn-outline-secondary mb-3">View Calendar</a>
+
+  {{#if cycles.length}}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Flow</th>
+        <th>Symptoms</th>
+        <th>Notes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each cycles}}
+      <tr>
+        <td>{{startDate}}</td>
+        <td>{{endDate}}</td>
+        <td>{{flow}}</td>
+        <td>
+          {{#if symptoms.cramps}}🩸 Cramps {{/if}}
+          {{#if symptoms.moodSwings}}😠 Mood {{/if}}
+          {{#if symptoms.bloating}}💨 Bloating {{/if}}
+          {{#if symptoms.fatigue}}😴 Fatigue {{/if}}
+        </td>
+        <td>{{notes}}</td>
+        <td>
+          <a href="/edit-cycle/{{_id}}" class="btn btn-sm btn-warning">Edit</a>
+          <a href="/delete-cycle/{{_id}}" class="btn btn-sm btn-danger" onclick="return confirm('Delete this cycle?');">Delete</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{else}}
+  <p>No cycles logged yet. <a href="/add-cycle">Add your first cycle</a>.</p>
+  {{/if}}
+</div>

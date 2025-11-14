@@ -1,0 +1,9 @@
+{{!< layout}}
+<h2>Next Period Prediction</h2>
+{{#if message}}
+  <p>{{message}}</p>
+{{else}}
+  <p>Average Cycle Length: <strong>{{avgCycle}}</strong> days</p>
+  <p>Estimated Next Period Start Date: <strong>{{nextStart}}</strong></p>
+{{/if}}
+<a href="/" class="btn btn-secondary mt-3">Back to Home</a>

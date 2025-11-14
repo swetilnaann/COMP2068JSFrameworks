@@ -1,0 +1,35 @@
+{{!< layout}}
+<div class="container mt-4">
+  <h2>Edit Cycle</h2>
+  <form method="POST" action="/edit-cycle/{{cycle._id}}">
+    <div class="mb-3">
+      <label>Start Date</label>
+      <input type="date" name="startDate" class="form-control" value="{{cycle.startDate}}" required>
+    </div>
+    <div class="mb-3">
+      <label>End Date</label>
+      <input type="date" name="endDate" class="form-control" value="{{cycle.endDate}}" required>
+    </div>
+    <div class="mb-3">
+      <label>Flow</label>
+      <select name="flow" class="form-control">
+        <option value="light" {{#if (eq cycle.flow "light")}}selected{{/if}}>Light</option>
+        <option value="medium" {{#if (eq cycle.flow "medium")}}selected{{/if}}>Medium</option>
+        <option value="heavy" {{#if (eq cycle.flow "heavy")}}selected{{/if}}>Heavy</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label>Symptoms</label><br>
+      <label><input type="checkbox" name="cramps" {{#if cycle.symptoms.cramps}}checked{{/if}}> Cramps</label><br>
+      <label><input type="checkbox" name="moodSwings" {{#if cycle.symptoms.moodSwings}}checked{{/if}}> Mood Swings</label><br>
+      <label><input type="checkbox" name="bloating" {{#if cycle.symptoms.bloating}}checked{{/if}}> Bloating</label><br>
+      <label><input type="checkbox" name="fatigue" {{#if cycle.symptoms.fatigue}}checked{{/if}}> Fatigue</label>
+    </div>
+    <div class="mb-3">
+      <label>Notes</label>
+      <textarea name="notes" class="form-control">{{cycle.notes}}</textarea>
+    </div>
+    <button class="btn btn-success">Save Changes</button>
+    <a href="/list" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>

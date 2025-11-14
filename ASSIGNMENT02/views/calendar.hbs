@@ -1,0 +1,107 @@
+{{!< layout}}
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+
+<div class="container mt-4">
+  <h2 class="text-center mb-4">📅 My Cycle Calendar</h2>
+  <div id="calendar"></div>
+</div>
+
+<!-- 🌸 Bootstrap Modal -->
+<div class="modal fade" id="phaseModal" tabindex="-1" aria-labelledby="phaseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow-lg">
+      <div class="modal-header bg-light">
+        <h5 class="modal-title fw-bold" id="phaseModalLabel">Cycle Phase</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center fs-5" id="phaseInfo">
+        <!-- Phase details will be shown here -->
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const calendarEl = document.getElementById("calendar");
+    const modal = new bootstrap.Modal(document.getElementById("phaseModal"));
+    const modalBody = document.getElementById("phaseInfo");
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: "dayGridMonth",
+      selectable: true,
+      headerToolbar: {
+        left: "prev,next today",
+        center: "title",
+        right: "dayGridMonth,dayGridWeek"
+      },
+      dateClick: function (info) {
+        showPhase(info.dateStr);
+      },
+      events: [
+        {{#each cycles}}
+          {
+            title: "🩸 Period",
+            start: "{{startDate}}",
+            end: "{{endDate}}",
+            color: "#ff6b81"
+          },
+        {{/each}}
+      ]
+    });
+
+    calendar.render();
+
+    // 🌸 Function to calculate and show phase
+    function showPhase(clickedDateStr) {
+      const clickedDate = dayjs(clickedDateStr);
+      let found = false;
+
+      {{#each cycles}}
+        const start = dayjs("{{startDate}}");
+        const end = dayjs("{{endDate}}");
+        if (clickedDate.isAfter(start.subtract(1, "day")) && clickedDate.isBefore(end.add(1, "day"))) {
+          const diff = clickedDate.diff(start, "day") + 1;
+          modalBody.innerHTML = `
+            <p>🩸 <strong>Day ${diff}</strong> of your period</p>
+            <p><em>Menstrual Phase</em></p>
+          `;
+          modal.show();
+          found = true;
+        }
+      {{/each}}
+
+      if (!found) {
+        {{#if cycles.length}}
+          const lastStart = dayjs("{{lastStartDate}}");
+          const daysSince = clickedDate.diff(lastStart, "day") % 28;
+
+          let phase = "";
+          let emoji = "";
+          if (daysSince <= 5) { phase = "Menstrual Phase"; emoji = "🩸"; }
+          else if (daysSince <= 13) { phase = "Follicular Phase"; emoji = "🌱"; }
+          else if (daysSince === 14) { phase = "Ovulation Phase"; emoji = "💧"; }
+          else { phase = "Luteal Phase"; emoji = "🌙"; }
+
+          modalBody.innerHTML = `
+            <p>${emoji} <strong>${clickedDate.format("MMMM D, YYYY")}</strong></p>
+            <p>Day ${daysSince} of your cycle</p>
+            <p><em>${phase}</em></p>
+          `;
+          modal.show();
+        {{else}}
+          modalBody.innerHTML = `
+            <p>No cycle data yet.</p>
+            <p>Please <a href="/add-cycle">add your first period</a> to begin tracking.</p>
+          `;
+          modal.show();
+        {{/if}}
+      }""
+    }
+  });
+</script>
