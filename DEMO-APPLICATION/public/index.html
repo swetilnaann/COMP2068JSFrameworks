@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LILY&LILAC – Products</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="logo">LILY&LILAC</div>
+    <nav class="nav">
+      <a href="/" class="nav-link active">Shop</a>
+      <a href="/cart.html" class="nav-link">
+        Cart (<span id="cartCount">0</span>)
+      </a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <div>
+        <h1>Tested Code. Trusted Cart.</h1>
+        <p>
+          This shopping demo uses functions fully covered by unit tests
+          (addItem, calculateSubtotal, calculateTax, and more).
+        </p>
+        <a href="#products" class="primary-btn">Shop Now</a>
+      </div>
+       <img src="/images/LILY-LILAC.jpeg" alt="Lilac Hero Image" class="hero-img" />
+    </section>
+
+    <section id="products" class="view">
+      <h2>Featured Products</h2>
+      <p class="subtitle">Choose quantity, add to cart, then see totals on the Cart page.</p>
+
+      <div class="product-grid">
+        <!-- 1: T-Shirt -->
+        <div class="product-card">
+          <img src="/images/CLASSIC T-SHIRT.jpeg" alt="Classic T-Shirt">
+          <h3>Classic T-Shirt</h3>
+          <p class="description">Soft cotton tee for everyday use.</p>
+          <p class="stock-label">In stock: 10</p>
+          <p class="price">$20.00</p>
+          <div class="qty-row">
+            <label for="qty-1">Qty</label>
+            <input type="number" id="qty-1" min="1" value="1" />
+          </div>
+          <button onclick="addToCart(1, 'Classic T-Shirt', 20, 'qty-1')">Add to Cart</button>
+        </div>
+
+        <!-- 2: Hat -->
+        <div class="product-card">
+          <img src="/images/COTTON HAT.jpeg" alt="Cotton Hat">
+          <h3>Cotton Hat</h3>
+          <p class="description">Keep the sun away in style.</p>
+          <p class="stock-label">In stock: 5</p>
+          <p class="price">$15.00</p>
+          <div class="qty-row">
+            <label for="qty-2">Qty</label>
+            <input type="number" id="qty-2" min="1" value="1" />
+          </div>
+          <button onclick="addToCart(2, 'Cotton Hat', 15, 'qty-2')">Add to Cart</button>
+        </div>
+
+        <!-- 3: Shoes -->
+        <div class="product-card">
+          <img src="/images/RUNNING SHOES.jpeg" alt="Running Shoes">
+          <h3>Running Shoes</h3>
+          <p class="description">Lightweight and comfy for long walks.</p>
+          <p class="stock-label stock-low">Only 4 left!</p>
+          <p class="price">$50.00</p>
+          <div class="qty-row">
+            <label for="qty-3">Qty</label>
+            <input type="number" id="qty-3" min="1" value="1" />
+          </div>
+          <button onclick="addToCart(3, 'Running Shoes', 50, 'qty-3')">Add to Cart</button>
+        </div>
+
+        <!-- 4: Hoodie -->
+        <div class="product-card">
+          <img src="/images/COZY HOODIE.jpeg" alt="Cozy Hoodie">
+          <h3>Cozy Hoodie</h3>
+          <p class="description">Perfect for chilly evenings and study sessions.</p>
+          <p class="stock-label stock-low">Only 3 left!</p>
+          <p class="price">$35.00</p>
+          <div class="qty-row">
+            <label for="qty-4">Qty</label>
+            <input type="number" id="qty-4" min="1" value="1" />
+          </div>
+          <button onclick="addToCart(4, 'Cozy Hoodie', 35, 'qty-4')">Add to Cart</button>
+        </div>
+
+        <!-- 5: Socks -->
+        <div class="product-card">
+          <img src="/images/COMFY SOCKS.jpeg" alt="Comfy Socks">
+          <h3>Comfy Socks (2-Pack)</h3>
+          <p class="description">Warm, breathable socks for everyday comfort.</p>
+          <p class="stock-label">In stock: 20</p>
+          <p class="price">$8.00</p>
+          <div class="qty-row">
+            <label for="qty-5">Qty</label>
+            <input type="number" id="qty-5" min="1" value="1" />
+          </div>
+          <button onclick="addToCart(5, 'Comfy Socks (2-Pack)', 8, 'qty-5')">Add to Cart</button>
+        </div>
+
+        <!-- 6: Sunglasses (YOUR IMAGE) -->
+        <div class="product-card">
+          <!-- Put your file at: public/images/sunglasses.jpg -->
+          <img src="/images/CLASSIC SUNGLASSES.jpeg" alt="Sunglasses">
+          <h3>Classic Sunglasses</h3>
+          <p class="description">Stylish UV protection for sunny days.</p>
+          <p class="stock-label stock-low">Only 2 left!</p>
+          <p class="price">$60.00</p>
+          <div class="qty-row">
+            <label for="qty-6">Qty</label>
+            <input type="number" id="qty-6" min="1" value="1" />
+          </div>
+          <button onclick="addToCart(6, 'Classic Sunglasses', 60, 'qty-6')">Add to Cart</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>Demo app for COMP 2068 – Unit Testing (Shopping Cart Example)</small>
+  </footer>
+
+  <!-- Toast message -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    let cartCountEl = document.getElementById("cartCount");
+    const toastEl = document.getElementById("toast");
+
+    async function fetchCartCount() {
+      const res = await fetch("/api/cart");
+      const data = await res.json();
+      const count = (data.cart || []).reduce((sum, item) => sum + item.quantity, 0);
+      cartCountEl.textContent = count;
+    }
+
+    function showToast(message) {
+      toastEl.textContent = message;
+      toastEl.classList.add("toast-visible");
+
+      setTimeout(() => {
+        toastEl.classList.remove("toast-visible");
+      }, 2000);
+    }
+
+    async function addToCart(id, name, price, qtyInputId) {
+      const qtyInput = document.getElementById(qtyInputId);
+      const quantity = Math.max(1, Number(qtyInput.value) || 1);
+
+      const res = await fetch(
+        `/api/add?id=${id}&name=${encodeURIComponent(name)}&price=${price}&qty=${quantity}`
+      );
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        showToast(data.error || "Could not add item.");
+        return;
+      }
+
+      fetchCartCount();
+      showToast(`Added ${quantity} × ${name} to cart ✅`);
+    }
+
+    // Load count on page load
+    fetchCartCount();
+  </script>
+</body>
+</html>

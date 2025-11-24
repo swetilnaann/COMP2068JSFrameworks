@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Unit Test Shop – Cart</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="logo">LILY&LILAC</div>
+    <nav class="nav">
+      <a href="/" class="nav-link">Shop</a>
+      <a href="/cart.html" class="nav-link active">Cart</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <section class="view">
+      <h1>Your Cart</h1>
+      <p class="subtitle">
+        These totals (subtotal, discount, shipping, tax, total) are calculated using the same
+        functions you unit tested, plus some extra logic for coupons and shipping.
+      </p>
+
+      <div id="cartEmptyMessage" class="empty-msg">
+        Your cart is empty. Go back to the Shop page to add items.
+      </div>
+
+      <div id="cartContent" class="cart-content hidden">
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Qty</th>
+              <th>Line Total</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="cartItems"></tbody>
+        </table>
+
+        <div class="totals">
+          <p><span>Subtotal:</span> <span>$<span id="subtotal">0.00</span></span></p>
+          <p><span>Discount:</span> <span>-$<span id="discount">0.00</span></span></p>
+          <p><span>Shipping:</span> <span>$<span id="shipping">0.00</span></span></p>
+          <p><span>Tax (13%):</span> <span>$<span id="tax">0.00</span></span></p>
+          <p class="total-row">
+            <span>Total:</span> <span>$<span id="total">0.00</span></span>
+          </p>
+
+          <div class="coupon-row">
+            <input
+              type="text"
+              id="couponCode"
+              placeholder="Promo code e.g. SAVE10"
+              class="coupon-input"
+            />
+            <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+          </div>
+          <p id="couponStatus" class="coupon-status">No coupon applied</p>
+
+          <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>Demo app for COMP 2068 – Unit Testing (Shopping Cart Example)</small>
+  </footer>
+
+  <script>
+    const cartItemsEl = document.getElementById("cartItems");
+    const cartEmptyMessageEl = document.getElementById("cartEmptyMessage");
+    const cartContentEl = document.getElementById("cartContent");
+
+    const subtotalEl = document.getElementById("subtotal");
+    const discountEl = document.getElementById("discount");
+    const shippingEl = document.getElementById("shipping");
+    const taxEl = document.getElementById("tax");
+    const totalEl = document.getElementById("total");
+
+    const couponCodeEl = document.getElementById("couponCode");
+    const couponStatusEl = document.getElementById("couponStatus");
+
+    function renderCart(data) {
+      const cart = data.cart || [];
+      const subtotal = data.subtotal || 0;
+      const discount = data.discount || 0;
+      const shipping = data.shipping || 0;
+      const tax = data.tax || 0;
+      const total = data.total || 0;
+      const activeCoupon = data.activeCoupon || null;
+
+      if (cart.length === 0) {
+        cartEmptyMessageEl.classList.remove("hidden");
+        cartContentEl.classList.add("hidden");
+        return;
+      }
+
+      cartEmptyMessageEl.classList.add("hidden");
+      cartContentEl.classList.remove("hidden");
+
+      cartItemsEl.innerHTML = "";
+
+      cart.forEach((item) => {
+        const lineTotal = (item.price * item.quantity).toFixed(2);
+        cartItemsEl.innerHTML += `
+          <tr>
+            <td>${item.name}</td>
+            <td>$${item.price.toFixed(2)}</td>
+            <td>${item.quantity}</td>
+            <td>$${lineTotal}</td>
+            <td>
+              <button class="remove-btn" onclick="removeFromCart(${item.id})">
+                Remove
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+
+      subtotalEl.textContent = subtotal.toFixed(2);
+      discountEl.textContent = discount.toFixed(2);
+      shippingEl.textContent = shipping.toFixed(2);
+      taxEl.textContent = tax.toFixed(2);
+      totalEl.textContent = total.toFixed(2);
+
+      if (activeCoupon) {
+        couponStatusEl.textContent = `Coupon applied: ${activeCoupon} (10% off subtotal)`;
+      } else {
+        couponStatusEl.textContent = "No coupon applied";
+      }
+    }
+
+    async function loadCart() {
+      const res = await fetch("/api/cart");
+      const data = await res.json();
+      renderCart(data);
+    }
+
+    async function removeFromCart(id) {
+      const res = await fetch(`/api/remove?id=${id}`);
+      const data = await res.json();
+      renderCart(data);
+    }
+
+    async function clearCart() {
+  const res = await fetch("/api/clear");
+  const data = await res.json();
+  renderCart(data);
+}
+
+    async function applyCoupon() {
+      const code = couponCodeEl.value.trim();
+      if (!code) return;
+
+      const res = await fetch(`/api/coupon?code=${encodeURIComponent(code)}`);
+      const data = await res.json();
+
+      if (data.error) {
+        alert(data.error);
+      }
+      renderCart(data);
+    }
+
+    loadCart();
+  </script>
+</body>
+</html>
