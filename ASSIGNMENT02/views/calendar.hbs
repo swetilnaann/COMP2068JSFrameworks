@@ -57,41 +57,65 @@
 
     calendar.render();
 
+    // helper to decide phase + emoji from day of cycle
+    function getPhase(cycleDay) {
+      const periodLength = 5;   // days 1–5
+      const cycleLength = 28;   // total cycle length
+
+      if (cycleDay <= periodLength) {
+        return { label: "Menstrual Phase", emoji: "🩸" };
+      } else if (cycleDay <= 14) {
+        return { label: "Follicular Phase", emoji: "🌱" };
+      } else if (cycleDay === 15 || cycleDay === 16) {
+        return { label: "Ovulation Phase", emoji: "💧" };
+      } else if (cycleDay <= cycleLength) {
+        return { label: "Luteal Phase", emoji: "🌙" };
+      } else {
+        return { label: "Outside tracked cycle", emoji: "❓" };
+      }
+    }
+
     // 🌸 Function to calculate and show phase
     function showPhase(clickedDateStr) {
       const clickedDate = dayjs(clickedDateStr);
       let found = false;
 
+      // 1) Check if the clicked date falls inside any logged period
       {{#each cycles}}
-        const start = dayjs("{{startDate}}");
-        const end = dayjs("{{endDate}}");
-        if (clickedDate.isAfter(start.subtract(1, "day")) && clickedDate.isBefore(end.add(1, "day"))) {
-          const diff = clickedDate.diff(start, "day") + 1;
+      {
+        const periodStart = dayjs("{{startDate}}");
+        const periodEnd = dayjs("{{endDate}}");
+
+        if (
+          clickedDate.isAfter(periodStart.subtract(1, "day")) &&
+          clickedDate.isBefore(periodEnd.add(1, "day"))
+        ) {
+          const diff = clickedDate.diff(periodStart, "day") + 1; // day of this period
+          const phaseInfo = getPhase(diff);
+
           modalBody.innerHTML = `
-            <p>🩸 <strong>Day ${diff}</strong> of your period</p>
-            <p><em>Menstrual Phase</em></p>
+            <p>${phaseInfo.emoji} <strong>Day ${diff}</strong> of your cycle</p>
+            <p><em>${phaseInfo.label}</em></p>
           `;
           modal.show();
           found = true;
         }
+      }
       {{/each}}
 
+      // 2) If not within a logged period: estimate based on last start date
       if (!found) {
         {{#if cycles.length}}
           const lastStart = dayjs("{{lastStartDate}}");
-          const daysSince = clickedDate.diff(lastStart, "day") % 28;
+          let daysSince = clickedDate.diff(lastStart, "day") % 28;
+          if (daysSince === 0) daysSince = 28; // avoid "Day 0"
 
-          let phase = "";
-          let emoji = "";
-          if (daysSince <= 5) { phase = "Menstrual Phase"; emoji = "🩸"; }
-          else if (daysSince <= 13) { phase = "Follicular Phase"; emoji = "🌱"; }
-          else if (daysSince === 14) { phase = "Ovulation Phase"; emoji = "💧"; }
-          else { phase = "Luteal Phase"; emoji = "🌙"; }
+          const phaseInfo = getPhase(daysSince);
 
           modalBody.innerHTML = `
-            <p>${emoji} <strong>${clickedDate.format("MMMM D, YYYY")}</strong></p>
+            <p>${phaseInfo.emoji} <strong>${clickedDate.format("MMMM D, YYYY")}</strong></p>
             <p>Day ${daysSince} of your cycle</p>
-            <p><em>${phase}</em></p>
+            <p><em>${phaseInfo.label}</em></p>
           `;
           modal.show();
         {{else}}
@@ -101,7 +125,7 @@
           `;
           modal.show();
         {{/if}}
-      }""
+      }
     }
   });
 </script>

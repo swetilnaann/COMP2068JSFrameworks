@@ -10,15 +10,30 @@
 
 </head>
 <body>
-  <nav class="navbar navbar-light mb-4">
-    <div class="container">
-      <a class="navbar-brand" href="/">🌸 Period Tracker</a>
-      <div>
-        <a href="/list" class="btn btn-outline-secondary btn-sm">My Cycles</a>
-        <a href="/calendar" class="btn btn-outline-secondary btn-sm">Calendar</a>
-      </div>
+ <nav class="navbar navbar-light bg-light px-3">
+  <a class="navbar-brand fw-bold" href="/dashboard">🌸 Period Tracker</a>
+
+  <div class="d-flex align-items-center gap-2">
+    <a href="/cycles" class="btn btn-outline-secondary btn-sm">My Cycles</a>
+    <a href="/calendar" class="btn btn-outline-secondary btn-sm">Calendar</a>
+
+    <!-- Profile dropdown -->
+    <div class="dropdown">
+      <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="profileMenu" data-bs-toggle="dropdown" aria-expanded="false">
+        {{#if user}} {{user.name}} {{else}} Profile {{/if}}
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu">
+        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+        <li><a class="dropdown-item" href="/settings">Settings</a></li>
+        <li><a class="dropdown-item" href="/cycles">My Cycles</a></li>
+        <li><a class="dropdown-item" href="/calendar">Calendar</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+      </ul>
     </div>
-  </nav>
+  </div>
+</nav>
+
 
   <div class="container">
     {{{body}}}

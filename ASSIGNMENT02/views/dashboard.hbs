@@ -1,9 +1,40 @@
 {{!< layout}}
-<div class="text-center">
-  <h1>🌸 Welcome, {{user.name}}!</h1>
+
+<div class="text-center mt-5">
+  <h2>Welcome, {{user.name}} !</h2>
   <p>Your personal period tracker dashboard.</p>
-  <a href="/add-cycle" class="btn btn-primary mt-3">Add Cycle</a>
-  <a href="/list" class="btn btn-outline-primary mt-3">My Cycles</a>
-  <a href="/calendar" class="btn btn-outline-secondary mt-3">Calendar</a>
-  <a href="/logout" class="btn btn-danger mt-3">Logout</a>
+</div>
+
+{{#if cycleDay}}
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body text-center">
+          <h5 class="card-title mb-3">Today’s Cycle Overview</h5>
+          <p class="mb-1">
+            <strong>Day {{cycleDay}}</strong> of your cycle
+          </p>
+          <p class="mb-2">
+            <em>{{phase}}</em>
+          </p>
+          <p class="small text-muted mb-0">
+            {{tip}}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+{{else}}
+  <div class="text-center mt-4">
+    <p>No cycles logged yet.</p>
+    <p>
+      <a href="/add-cycle">Log your first period</a> to start tracking your cycle.
+    </p>
+  </div>
+{{/if}}
+
+<div class="text-center mt-4">
+  <a href="/add-cycle" class="btn btn-primary">Add Cycle</a>
+  <a href="/cycles" class="btn btn-outline-primary">My Cycles</a>
+  <a href="/calendar" class="btn btn-outline-secondary">Calendar</a>
 </div>

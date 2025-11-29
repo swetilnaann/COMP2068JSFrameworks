@@ -1,14 +1,17 @@
 {{!< layout}}
 <h2>Log New Cycle</h2>
+
 <form method="POST" action="/add-cycle" class="mt-3">
   <div class="mb-3">
     <label>Start Date</label>
-    <input type="date" name="startDate" class="form-control" required>
+    <input type="date" id="startDate" name="startDate" class="form-control" required>
   </div>
+
   <div class="mb-3">
     <label>End Date</label>
-    <input type="date" name="endDate" class="form-control" required>
+    <input type="date" id="endDate" name="endDate" class="form-control" required>
   </div>
+
   <div class="mb-3">
     <label>Flow Level</label>
     <select name="flow" class="form-control" required>
@@ -17,6 +20,7 @@
       <option value="heavy">Heavy</option>
     </select>
   </div>
+
   <div class="mb-3">
     <label>Symptoms</label><br>
     <label><input type="checkbox" name="cramps"> Cramps</label><br>
@@ -24,9 +28,34 @@
     <label><input type="checkbox" name="bloating"> Bloating</label><br>
     <label><input type="checkbox" name="fatigue"> Fatigue</label>
   </div>
+
   <div class="mb-3">
     <label>Notes</label>
     <textarea name="notes" class="form-control"></textarea>
   </div>
+
   <button class="btn btn-success">Save Cycle</button>
 </form>
+
+<!-- Auto-fill End Date when Start Date is selected -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const startInput = document.getElementById("startDate");
+    const endInput = document.getElementById("endDate");
+
+    const defaultPeriodLength = 5; // 5-day period
+
+    startInput.addEventListener("change", function () {
+      if (!startInput.value) return;
+
+      const start = new Date(startInput.value);
+      if (isNaN(start)) return;
+
+      // Auto-fill end date = start + 4 days (so total is 5 days)
+      const end = new Date(start);
+      end.setDate(end.getDate() + defaultPeriodLength - 1);
+
+      endInput.value = end.toISOString().slice(0, 10); // format yyyy-mm-dd
+    });
+  });
+</script>
