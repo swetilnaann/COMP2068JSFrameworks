@@ -1,0 +1,100 @@
+<div class="home-hero py-5">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- LEFT SIDE TEXT -->
+      <div class="col-md-6">
+        <p class="text-uppercase small fw-semibold text-secondary mb-1">
+          PERIOD TRACKER • FOR YOU 🌸
+        </p>
+
+        <h1 class="hero-title mb-3">
+          Understand your cycle, <br />
+          take care of you.
+        </h1>
+
+        <p class="hero-subtitle mb-4">
+          Log your periods, track symptoms, and see your cycle phases on a calendar.
+          Login with email or Google and keep everything in one place.
+        </p>
+
+        <!-- ===== HERO BUTTONS ===== -->
+        {{#if user}}
+          <a href="/dashboard" class="btn btn-primary btn-lg me-2">
+            Go to Dashboard
+          </a>
+
+          <a href="/cycles" class="btn btn-pink-solid btn-lg">
+            My Cycles
+          </a>
+        {{else}}
+          <a href="/register" class="btn btn-primary btn-lg me-2">
+            Get Started – It’s Free
+          </a>
+
+          <a href="/login" class="btn btn-outline-secondary btn-lg">
+            Login
+          </a>
+        {{/if}}
+      </div>
+
+      <!-- RIGHT SIDE BOX -->
+      <div class="col-md-5 offset-md-1">
+        <div class="p-4 bg-white shadow-sm rounded-4">
+          <h5 class="fw-bold mb-3">Why track your period?</h5>
+
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">🌸 Notice patterns in mood, energy, and cramps.</li>
+            <li class="mb-2">📅 Plan around your cycle phases and important dates.</li>
+            <li class="mb-2">✨ Feel more in control and kinder to yourself.</li>
+          </ul>
+
+          <p class="small text-secondary mt-3">
+            Your data is private and only visible after you log in.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== EDUCATION SECTION ===== -->
+<div class="container mt-5 education-section">
+  <h3 class="text-center fw-bold mb-4">Learn more about your period</h3>
+
+  <div class="row g-4">
+    <!-- Card 1 -->
+    <div class="col-md-4">
+      <div class="edu-card shadow-sm">
+        <img src="/images/period-calories.jpeg" class="img-fluid" />
+        <div class="p-3">
+          <h6 class="fw-bold">Period calories don’t count?</h6>
+          <p class="small text-secondary">Girl math says chocolate during PMS is basically medicine.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-md-4">
+      <div class="edu-card shadow-sm">
+        <img src="/images/period-hacks.jpeg" class="img-fluid" />
+        <div class="p-3">
+          <h6 class="fw-bold">Period hacks & cramp relief</h6>
+          <p class="small text-secondary">Learn helpful tips to feel better during your cycle.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-4">
+      <div class="edu-card shadow-sm">
+        <img src="/images/period-blood.jpeg" class="img-fluid" />
+        <div class="p-3">
+          <h6 class="fw-bold">What your blood can tell you</h6>
+          <p class="small text-secondary">Spotting symptoms early helps understand your cycle better.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

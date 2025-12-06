@@ -1,40 +1,52 @@
 {{!< layout}}
 
-<div class="text-center mt-5">
-  <h2>Welcome, {{user.name}} !</h2>
-  <p>Your personal period tracker dashboard.</p>
-</div>
+<div class="dashboard-wrapper text-center mt-4">
+  <h2 class="mb-2">
+    <i class="bi bi-person-heart text-pink me-2"></i>
+    Welcome, {{user.name}} !
+  </h2>
+  <p class="text-muted mb-4">Your personal period tracker dashboard.</p>
 
-{{#if cycleDay}}
-  <div class="row justify-content-center mt-4">
-    <div class="col-md-6">
-      <div class="card shadow-sm">
-        <div class="card-body text-center">
-          <h5 class="card-title mb-3">Today’s Cycle Overview</h5>
-          <p class="mb-1">
-            <strong>Day {{cycleDay}}</strong> of your cycle
-          </p>
-          <p class="mb-2">
-            <em>{{phase}}</em>
-          </p>
-          <p class="small text-muted mb-0">
-            {{tip}}
-          </p>
-        </div>
+  {{#if hasCycle}}
+    <div class="card dashboard-card mx-auto shadow-sm">
+      <div class="card-body">
+        <p class="text-uppercase small text-muted mb-1">
+          <i class="bi bi-droplet-half me-1 text-pink"></i>Today’s Cycle Overview
+        </p>
+        <h5 class="mb-1">
+          Day <strong>{{cycleDay}}</strong> of your cycle
+        </h5>
+        <p class="mb-2">
+          <span class="badge bg-light text-dark border">{{phaseName}}</span>
+        </p>
+        <p class="text-muted small mb-0">
+          {{tip}}
+        </p>
       </div>
     </div>
-  </div>
-{{else}}
-  <div class="text-center mt-4">
-    <p>No cycles logged yet.</p>
-    <p>
-      <a href="/add-cycle">Log your first period</a> to start tracking your cycle.
-    </p>
-  </div>
-{{/if}}
+  {{else}}
+    <div class="card dashboard-card mx-auto shadow-sm">
+      <div class="card-body">
+        <h5 class="mb-2">
+          <i class="bi bi-emoji-smile-upside-down text-pink me-1"></i>
+          No cycles logged yet
+        </h5>
+        <p class="text-muted small mb-0">
+          Add your first period to start tracking your cycle, moods, and phases.
+        </p>
+      </div>
+    </div>
+  {{/if}}
 
-<div class="text-center mt-4">
-  <a href="/add-cycle" class="btn btn-primary">Add Cycle</a>
-  <a href="/cycles" class="btn btn-outline-primary">My Cycles</a>
-  <a href="/calendar" class="btn btn-outline-secondary">Calendar</a>
+  <div class="mt-4 d-flex justify-content-center gap-2 flex-wrap">
+    <a href="/add-cycle" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-1"></i>Add Cycle
+    </a>
+    <a href="/cycles" class="btn btn-outline-primary">
+      <i class="bi bi-list-ul me-1"></i>My Cycles
+    </a>
+    <a href="/calendar" class="btn btn-outline-secondary">
+      <i class="bi bi-calendar-heart me-1"></i>Calendar
+    </a>
+  </div>
 </div>

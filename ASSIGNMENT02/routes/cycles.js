@@ -1,11 +1,12 @@
+// routes/cycles.js
 const express = require("express");
 const router = express.Router();
 const dayjs = require("dayjs");
 const Cycle = require("../models/cycle");
 
-// === READ: All cycles ===
+// === READ: All cycles for THIS user ===
 router.get("/cycles", async (req, res) => {
-  const cycles = await Cycle.find().lean();
+  const cycles = await Cycle.find({ user: req.user._id }).lean();
 
   cycles.forEach((c) => {
     c.startDate = dayjs(c.startDate).format("YYYY-MM-DD");
@@ -30,15 +31,27 @@ router.post("/add-cycle", async (req, res) => {
     fatigue: !!req.body.fatigue,
   };
 
-  // no userId filter – saves like your original version
-  await Cycle.create({ startDate, endDate, flow, symptoms, notes });
+  await Cycle.create({
+    user: req.user._id,
+    startDate,
+    endDate,
+    flow,
+    symptoms,
+    notes,
+  });
 
   res.redirect("/cycles");
 });
 
 // === EDIT: Load form ===
 router.get("/edit-cycle/:id", async (req, res) => {
-  const cycle = await Cycle.findById(req.params.id).lean();
+  const cycle = await Cycle.findOne({
+    _id: req.params.id,
+    user: req.user._id,
+  }).lean();
+
+  if (!cycle) return res.redirect("/cycles");
+
   res.render("edit-cycles", { title: "Edit Cycle", cycle, user: req.user });
 });
 
@@ -52,23 +65,21 @@ router.post("/edit-cycle/:id", async (req, res) => {
     fatigue: !!req.body.fatigue,
   };
 
-  await Cycle.findByIdAndUpdate(req.params.id, {
-    startDate,
-    endDate,
-    flow,
-    symptoms,
-    notes,
-  });
+  await Cycle.findOneAndUpdate(
+    { _id: req.params.id, user: req.user._id },
+    { startDate, endDate, flow, symptoms, notes }
+  );
 
   res.redirect("/cycles");
 });
 
 // === DELETE ===
 router.get("/delete-cycle/:id", async (req, res) => {
-  await Cycle.findByIdAndDelete(req.params.id);
+  await Cycle.findOneAndDelete({
+    _id: req.params.id,
+    user: req.user._id,
+  });
   res.redirect("/cycles");
 });
-
-// (no /calendar here – calendar is handled in app.js)
 
 module.exports = router;

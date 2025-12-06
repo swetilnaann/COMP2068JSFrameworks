@@ -14,9 +14,12 @@
     "body-parser": "^2.2.0",
     "bootstrap": "^5.3.8",
     "dayjs": "^1.11.19",
+    "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "hbs": "^4.2.0",
-    "mongoose": "^8.19.3"
+    "mongoose": "^8.19.3",
+    "passport-github2": "^0.1.12",
+    "passport-google-oauth20": "^2.0.0"
   }
 }

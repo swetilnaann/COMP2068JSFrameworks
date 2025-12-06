@@ -3,40 +3,77 @@
 <head>
   <meta charset="UTF-8" />
   <title>{{title}}</title>
+
+  <!-- Your custom CSS -->
   <link rel="stylesheet" href="/style.css" />
+
+  <!-- Bootstrap + Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
- <nav class="navbar navbar-light bg-light px-3">
-  <a class="navbar-brand fw-bold" href="/dashboard">🌸 Period Tracker</a>
 
-  <div class="d-flex align-items-center gap-2">
-    <a href="/cycles" class="btn btn-outline-secondary btn-sm">My Cycles</a>
-    <a href="/calendar" class="btn btn-outline-secondary btn-sm">Calendar</a>
+  <!-- 🌸 SHARED HEADER -->
+  <nav class="navbar navbar-light px-3 cute-nav">
+    <a class="navbar-brand fw-bold" href="{{#if user}}/dashboard{{else}}/{{/if}}">
+      🌸 Period Tracker
+    </a>
 
-    <!-- Profile dropdown -->
-    <div class="dropdown">
-      <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" id="profileMenu" data-bs-toggle="dropdown" aria-expanded="false">
-        {{#if user}} {{user.name}} {{else}} Profile {{/if}}
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu">
-        <li><a class="dropdown-item" href="/profile">Profile</a></li>
-        <li><a class="dropdown-item" href="/settings">Settings</a></li>
-        <li><a class="dropdown-item" href="/cycles">My Cycles</a></li>
-        <li><a class="dropdown-item" href="/calendar">Calendar</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
-      </ul>
+    <div class="d-flex align-items-center gap-2">
+      <!-- Top-level links -->
+      <a href="/" class="btn btn-outline-secondary btn-sm nav-pill">Home</a>
+      <a href="/public-cycles" class="btn btn-outline-secondary btn-sm nav-pill">Public Cycles</a>
+
+      {{#if user}}
+        <a href="/dashboard" class="btn btn-outline-secondary btn-sm nav-pill">Dashboard</a>
+
+        <!-- User dropdown -->
+        <div class="dropdown">
+          <button
+            class="btn btn-outline-secondary btn-sm nav-pill dropdown-toggle"
+            type="button"
+            id="profileMenu"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <i class="bi bi-person-heart me-1"></i>{{user.name}}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileMenu">
+            <li>
+              <a class="dropdown-item" href="/cycles">
+                <i class="bi bi-droplet-half me-2 text-pink"></i>My Cycles
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/calendar">
+                <i class="bi bi-calendar-heart me-2 text-pink"></i>Calendar
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a class="dropdown-item text-danger" href="/logout">
+                <i class="bi bi-box-arrow-right me-2"></i>Logout
+              </a>
+            </li>
+          </ul>
+        </div>
+      {{else}}
+        <a href="/login" class="btn btn-primary btn-sm nav-pill">Login</a>
+        <a href="/register" class="btn btn-outline-secondary btn-sm nav-pill">Register</a>
+      {{/if}}
     </div>
-  </div>
-</nav>
+  </nav>
 
-
-  <div class="container">
+  <!-- 🌸 MAIN CONTENT -->
+  <div class="container main-container">
     {{{body}}}
   </div>
+
+  <!-- 🌸 SHARED FOOTER -->
+  <footer>
+    © {{year}} Period Tracker • Made with ❤️ for COMP2068
+  </footer>
+
 </body>
 </html>

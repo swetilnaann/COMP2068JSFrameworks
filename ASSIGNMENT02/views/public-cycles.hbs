@@ -1,0 +1,54 @@
+{{!< layout}}
+
+<div class="container mt-4">
+  
+  <div class="text-center mb-4">
+    <h2 class="mb-2">
+      📄 <strong>Public Period Records</strong>
+    </h2>
+    <p class="text-muted">
+      This page is a <strong>read-only, anonymous directory</strong> that lists 
+      cycle documents stored in the database.  
+      It exists to meet the COMP2068 requirement for a public view page.
+      <br>
+      No names, emails, or user-identifying information are shown.
+    </p>
+  </div>
+
+  <div class="text-center mb-3">
+    <a href="/" class="btn btn-outline-secondary btn-sm">⬅ Back to Home</a>
+  </div>
+
+  {{#if cycles.length}}
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Flow</th>
+          <th>Symptoms</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each cycles}}
+        <tr>
+          <td>{{@index}}</td>
+          <td>{{startDate}}</td>
+          <td>{{endDate}}</td>
+          <td>{{flow}}</td>
+          <td>
+            {{#if symptoms.cramps}}🩸 Cramps {{/if}}
+            {{#if symptoms.moodSwings}}😠 Mood Swings {{/if}}
+            {{#if symptoms.bloating}}💨 Bloating {{/if}}
+            {{#if symptoms.fatigue}}😴 Fatigue {{/if}}
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  {{else}}
+    <p class="mt-4 text-center">No cycle records are available yet.</p>
+  {{/if}}
+
+</div>
